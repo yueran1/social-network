@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, redirect, url_for
+from flask import Flask, render_template, session, redirect, url_for, flash
 from flask_bootstrap import Bootstrap
 from flask_wtf import Form
 from wtforms import StringField, SubmitField
@@ -25,6 +25,10 @@ def index():
     #When user navigate the app for 1st time, there is no name
     #After user submits a name, this name can be displayed on website
     if form.validate_on_submit():
+    	old_name= session.get('name')
+    	if old_name is not None and old_name != form.name.data:
+    		flash("Gai Lai! name is different!")
+    	
     	#name= form.name.data
     	session['name']= form.name.data
     	
