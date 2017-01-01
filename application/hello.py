@@ -67,14 +67,14 @@ def index():
     #When user navigate the app for 1st time, there is no name
     #After user submits a name, this name can be displayed on website
     if form.validate_on_submit():
-    	user = User.query.filter_by)(username=form.name.data).first()
+    	user = User.query.filter_by(username=form.name.data).first()
     	if user is None:
     	
 			user= User(username= form.name.data)
 			db.session.add(user)
 			session['known']= False
     	else:
-    		session['know']= True
+    		session['known']= True
     	
     	
     	'''old_name= session.get('name')
