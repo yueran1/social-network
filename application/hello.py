@@ -5,13 +5,18 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import Required
 from flask_sqlalchemy import SQLAlchemy
 from flask_script import Shell, Manager
+from flask_migrate import Migrate, MigrateCommand
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
+
+
 app = Flask(__name__)
-manager=Manager(app)
+
+
+
 
 
 #==================Chapter 5 database====================
@@ -22,9 +27,19 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir,'dat
 
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 
+
 #db object instantiated from class SQLAlchemy represents the database
 #provides all functionality of FLask-SQLAlchemy
 db=SQLAlchemy(app)
+
+#Migrate can implement the database qian yi, to make update databse avoid delete the 
+#original database
+migrate=Migrate(app,db)
+manager=Manager(app)
+manager.add_command('db', MigrateCommand)
+
+
+
 
 class Role(db.Model):
 	__tablename__ = 'roles'
@@ -116,7 +131,8 @@ def make_shell_context():
 	return dict(app=app, db=db, User=User, Role=Role)
 manager.add_command("shell", Shell(make_context=make_shell_context))
 
-
+#The server startup is routed through manager.run() instead of app.run(), where the command line
+#is parsed
 if __name__ == '__main__':
-    app.run(debug=True)
+    manager.run()
 
