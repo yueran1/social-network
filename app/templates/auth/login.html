@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %}Login{% endblock %}
+{% block title %}GaiLai-Login{% endblock %}
 
 
 <!-- Latest compiled and minified CSS -->
@@ -23,10 +23,5 @@
     {{ wtf.quick_form(form) }}
 </div>
 <br>
-<div class="col-md-4">
-<p>
-    New user?
-    <a href="{{ url_for('auth.register') }}">Register</a> 
-</p>
-</div>
+
 {% endblock %}
