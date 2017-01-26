@@ -2,7 +2,7 @@ from flask import render_template, redirect, request, url_for, flash
 from flask_login import login_user, login_required, logout_user, current_user
 from . import auth
 from ..models import User
-from .forms import LoginForm, RegistrationForm, ChangePasswordForm
+from .forms import LoginForm, RegistrationForm, ChangePasswordForm, ConfirmForm
 from ..import db
 
 @auth.route('/login', methods=['GET','POST'])
@@ -62,3 +62,18 @@ def unconfirmed():
 	if current_user.is_anonymous or current_user.confirmed:
 		return redirect(url_for('main.index'))
 	return render_template('auth/unconfirmed.html')
+	
+@auth.route('/confirmed', methods=['GET', 'POST'])
+@login_required
+def confirmed():
+	form = ConfirmForm()
+	if form.validate_on_submit():
+		#if current_user.username == form.username.data:
+			user= User.query.filter_by(username=form.username.data).first()
+			user.confirmed=True
+			db.session.add(user)
+			db.session.commit()
+			flash('This account is confirmed' )
+			return redirect(url_for('main.index'))
+	return render_template('auth/confirmed.html',form=form)
+	

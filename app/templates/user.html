@@ -1,25 +1,27 @@
 {% extends "base.html"%}
-{% block title%}GaiLai-{{user.username}}{%endblock%}
 
+{% block title%}GaiLai - {{user.username}}{% endblock%}
 
 {% block page_content%}
 <div class="page-header">
-	<h1>{{ user.username}}</h1>
+  <div class="profile_header">
+  	<h1>{{user.username}}</h1>
+  	{% if user.username=='admin'%}
+  	
+	<p> Need Confirm account? <a href="{{ url_for('auth.confirmed')}}"> Click here to confirm</a><p>
+
 	
-	{% if user.name%}
-	<p>
-		{{user.name}}
-	</p>
-	{% endif%}
-	
-	{% if current_user.is_administrator()%}
-	<p>  hello admin </p>
-	{% endif%}
-	{%if user.about_me %}<p>{{user.about_me}}</p>{%endif%}
-	
-	<p>
-		Member Since {{ moment(user.member_since).format('L')}}.
-		Last seen {{ moment(user.last_seen).fromNow()}}.
-	</p>
+  	{%endif%}
+  	{% if current_user.is_administrator() %}
+        <p>You are the boss</p>
+        {% endif %}
+        {% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
+        <p>Member since {{ moment(user.member_since).format('L') }}. 
+        Last seen {{ moment(user.last_seen).fromNow() }}.</p>
+        <p>
+          
+</p>
+  </div>
 </div>
+
 {% endblock%}

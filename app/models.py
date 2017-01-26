@@ -86,6 +86,7 @@ class User(UserMixin, db.Model):
 				self.confirmed = True
 				
 	def can(self, permissions):
+		print(self.role.permissions)
 		return self.role is not None and (self.role.permissions & permissions) == permissions
 	
 	def is_administrator(self):
