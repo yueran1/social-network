@@ -83,7 +83,7 @@ class User(UserMixin, db.Model):
 				self.confirmed = True
 			else:
 				self.role= Role.query.filter_by(default=True).first()
-				self.confirmed = True
+				#self.confirmed = True
 				
 	def can(self, permissions):
 		print(self.role.permissions)
