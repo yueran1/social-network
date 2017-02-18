@@ -2,36 +2,23 @@ from datetime import datetime
 from flask import render_template, session, redirect, url_for, current_app
 from flask import render_template, redirect, request, url_for, flash
 from . import main
-from .forms import NameForm, EditProfileForm, EditProfileAdminForm
+from .forms import NameForm, EditProfileForm, EditProfileAdminForm,PostForm
 from .. import db
-from ..models import User, Role
+from ..models import User, Role, Post, Permission
 from flask_login import login_user, login_required, logout_user, current_user
 from ..decorators import admin_required
 
-@main.route('/', methods=['GET','POST'])
+@main.route('/',methods=['GET','POST'])
 def index():
-   
-    name= None
-    form= NameForm()
-    #When user navigate the app for 1st time, there is no name
-    #After user submits a name, this name can be displayed on website
-    if form.validate_on_submit():
-    	user = User.query.filter_by(username=form.name.data).first()
-    	if user is None:
-    	
-			user= User(username= form.name.data)
-			db.session.add(user)
-			session['known']= False
-    	else:
-    		session['known']= True
+	form=PostForm()
+	if current_user.can(Permission.WRITE_ARTICLES) and form.validate_on_submit():
+		post= Post(body=form.body.data, author=current_user._get_current_object())
+		db.session.add(post)
+		return redirect(url_for('.index'))
+	posts = Post.query.order_by(Post.timestamp.desc()).all()
+	return render_template('index.html', form=form, posts=posts)
+    
 
-    	session['name']= form.name.data
-    	
-    	form.name.data= ''
-    	#The only vaiable in url_for is enpoint, by default, endpoint's name is view 			#function's name
-    	return redirect(url_for('.index'))
-    #Use GET instead of POST to avoid repeatly submit request
-    return render_template('index.html', form=form, name=session.get('name'), known=session.get('known', False), current_time = datetime.utcnow())
     
     
 @main.route('/user/<username>')
