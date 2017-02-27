@@ -1,5 +1,6 @@
 {% extends "base.html"%}
 
+
 {% block title%}GaiLai - {{user.username}}{% endblock%}
 
 {% block page_content%}
@@ -36,8 +37,13 @@
 	<a class="btn btn-default" href="{{url_for('.edit_profile')}}">
 		Edit Profile
 	</a>
+	
 	{%endif%}
   </div>
+  
+  
 </div>
+<h3>Posts by {{user.username}}</h3>
+<div> {% include '_posts.html'%} </div>
 
 {% endblock%}
