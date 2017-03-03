@@ -6,6 +6,7 @@ class Config:
 	SQLALCHEMY_COMMIT_ON_TEARDOWN = True
 	#ADMIN = os.environ.get('ADMIN')
 	ADMIN = 'admin'
+	FLASKY_POSTS_PER_PAGE =20
 	
 	@staticmethod
 	def init_app(app):

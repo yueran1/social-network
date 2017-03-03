@@ -45,5 +45,10 @@
 </div>
 <h3>Posts by {{user.username}}</h3>
 <div> {% include '_posts.html'%} </div>
+{% if pagination%}
+<div class="pagination">
+	{{ macro.pagination_widget(pagination, '.index')}}
+</div>
+{% endif%}
 
 {% endblock%}
