@@ -8,6 +8,12 @@ from ..models import User, Role, Post, Permission
 from flask_login import login_user, login_required, logout_user, current_user
 from ..decorators import admin_required
 
+@main.route('/post/<int:id>')
+def post(id):
+	post = Post.query.get_or_404(id)
+	return render_template('post.html', posts=[post])
+
+
 @main.route('/',methods=['GET','POST'])
 def index():
 	form=PostForm()
