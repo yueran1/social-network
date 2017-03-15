@@ -142,7 +142,7 @@ class User(UserMixin, db.Model):
 	username= db.Column(db.String(64), unique=True, index=True)
 	role_id= db.Column(db.Integer, db.ForeignKey('roles.id'))
 	password_hash= db.Column(db.String(128))
-	confirmed = db.Column(db.Boolean, default=False)
+	confirmed = db.Column(db.Boolean, default=True)
 	
 	name = db.Column(db.String(64))
 	location = db.Column(db.String(64))
@@ -166,7 +166,7 @@ class User(UserMixin, db.Model):
 				self.confirmed = True
 			else:
 				self.role= Role.query.filter_by(default=True).first()
-				#self.confirmed = True
+				self.confirmed = True
 				
 	def can(self, permissions):
 		print(self.role.permissions)
